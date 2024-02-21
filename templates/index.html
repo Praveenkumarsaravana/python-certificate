@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #certificateResult {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #certificateImage {
+            max-width: 300px; /* Adjust the maximum width as needed */
+            max-height: 200px; /* Adjust the maximum height as needed */
+        }
+        #img{
+            max-width: 300px; /* Adjust the maximum width as needed */
+            max-height: 200px
+        }
+    </style>
+</head>
+<body>
+    <h1>Certificate Checker</h1>
+    <form id="certificateForm">
+        <label for="attempts">No. of Attempts:</label>
+        <input type="number" id="attempts" name="attempts" required>
+        <br>
+        <label for="marks">Marks:</label>
+        <input type="number" id="marks" name="marks" required>
+        <br>
+        <!-- Removed the button -->
+    </form>
+    <div id="certificateResult">
+        <img id="certificateImage" src="{{ url_for('static', filename=certificate_image) }}" alt="{{ certificate_name }}">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to trigger AJAX request on input
+            function getCertificate() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/get_certificate',
+                    data: $('#certificateForm').serialize(),
+                    success: function(response) {
+                        $('#certificateResult').html(response);
+                    }
+                });
+            }
+
+            // Trigger the AJAX request on input events
+            $('#attempts, #marks').on('input', getCertificate);
+        });
+    </script>
+</body>
+</html>
